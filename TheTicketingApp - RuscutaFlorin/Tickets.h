@@ -211,6 +211,28 @@ public:
 		return 0;
 	}
 
+	int operator[](const string ticketType) {
+		if (typesNumber > 0 && types != nullptr) {
+			for (int i = 0; i < typesNumber; ++i) {
+				if (ticketType == types[i])
+					return price[i];
+			}
+		}
+		return 0;
+	}
+	//Tickets a;
+	// int* x = (int*)a => preturile la bilete ale obiectului a.
+	explicit operator int* () {
+		if (price != nullptr && typesNumber > 0) {
+			int* copy = new int[typesNumber];
+			for (int i = 0; i < typesNumber; ++i) {
+				copy[i] = price[i];
+			}
+			return copy;
+		}
+		return nullptr;
+	}
+
 	friend ostream& operator<<(ostream& out, Tickets obj);
 	friend istream& operator>>(istream& in, Tickets& obj);
 
@@ -252,3 +274,4 @@ istream& operator>>(istream& in, Tickets& obj)
 	}
 	return in;
 }
+
