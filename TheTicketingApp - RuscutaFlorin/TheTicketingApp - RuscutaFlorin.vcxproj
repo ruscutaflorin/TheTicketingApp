@@ -128,19 +128,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="buildingStructure.cpp" />
-    <ClCompile Include="Date.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Location.cpp" />
+    <ClCompile Include="SaleTickets.cpp" />
     <ClCompile Include="TheTicketingApp - RuscutaFlorin.cpp" />
     <ClCompile Include="Tickets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buildingStructure.h" />
-    <ClInclude Include="Date.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Location.h" />
+    <ClInclude Include="SaleTickets.h" />
     <ClInclude Include="Tickets.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

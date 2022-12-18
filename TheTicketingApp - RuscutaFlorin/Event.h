@@ -1,30 +1,32 @@
 using namespace std;
 #include <iostream>
 #include <cstring>
-#include "Date.h"
 #include "Location.h"
-/// <summary>
-/// zi luna an string daca folosesc pt validari
-/// vector de preturi pe zone
-/// </summary>
+#include "Helpers.h"
+
 class Event
 {
 	friend class Tickets;
 
 private:
-	Date date;
+	string date, day, year, month;
 	Location location;
 	char* eventName;
 	string* eventOrganizers;
-	unsigned int organizersNumber;
+	int organizersNumber;
 	string* eventParticipants;
-	unsigned int participantsNumber;
+	int participantsNumber;
 	string* eventSponsors;
-	unsigned int sponsorsNumber;
+	int sponsorsNumber;
 	long long eventSoldTickets;
-	unsigned int maxSpectators;
-	// de facut verificari cu location.maxCapacity si maxSpectators
-	Event() {
+	int maxSpectators;
+	const int ageRestricted;
+	// de facut verificari cu location.maxCapacity si maxSpectators in main
+
+public:
+
+	Event() :ageRestricted(18) {
+		date = "Undefined";
 		eventName = nullptr;
 		eventOrganizers = nullptr;
 		organizersNumber = 0;
@@ -36,10 +38,19 @@ private:
 		maxSpectators = 0;
 	}
 
-	Event(const char* eventName, const string* eventOrganizers, const unsigned int organizersNumber, const string* eventParticipants, const unsigned int participantsNumber, const string* eventSponsors, const unsigned int sponsorsNumber, const long long eventSoldTickets, const unsigned int maxSpectators, const Date dateObject, const Location locationObject) :Event() {
+	Event(const string day, const string month, const string year, const char* eventName, const string* eventOrganizers, const  int organizersNumber, const string* eventParticipants, const  int participantsNumber, const string* eventSponsors, const  int sponsorsNumber, const long long eventSoldTickets, const  int maxSpectators, const  int ageRestricted, const Location locationObject) :ageRestricted(ageRestricted) {
+
+		this->day = day;
+		this->month = month;
+		this->year = year;
+		date = day + '-' + month + '-' + year;
+
 		if (eventName != nullptr) {
 			this->eventName = new char[strlen(eventName) + 1];
 			strcpy_s(this->eventName, strlen(eventName) + 1, eventName);
+		}
+		else {
+			this->eventName = nullptr;
 		}
 		if (eventOrganizers != nullptr && organizersNumber > 0) {
 			this->eventOrganizers = new string[organizersNumber];
@@ -48,12 +59,20 @@ private:
 			}
 			this->organizersNumber = organizersNumber;
 		}
+		else {
+			this->eventOrganizers = nullptr;
+			this->organizersNumber = 0;
+		}
 		if (eventParticipants != nullptr && participantsNumber > 0) {
 			this->eventParticipants = new string[participantsNumber];
 			for (int i = 0; i < participantsNumber; ++i) {
 				this->eventParticipants[i] = eventParticipants[i];
 			}
 			this->participantsNumber = participantsNumber;
+		}
+		else {
+			this->eventParticipants = nullptr;
+			this->participantsNumber = 0;
 		}
 		if (eventSponsors != nullptr && sponsorsNumber > 0) {
 			this->eventSponsors = new string[sponsorsNumber];
@@ -62,21 +81,18 @@ private:
 			}
 			this->sponsorsNumber = sponsorsNumber;
 		}
-
+		else {
+			this->eventSponsors = nullptr;
+			this->sponsorsNumber = 0;
+		}
 		this->eventSoldTickets = eventSoldTickets;
 		this->maxSpectators = maxSpectators;
-
-		if ((dateObject.isValid())) {
-			date.setDay(dateObject.day());
-			date.setMonth(dateObject.month());
-			date.setYear(dateObject.month());
-		}
 
 		location = locationObject;
 
 	}
 
-	Event(const Event& object) {
+	Event(const Event& object) :ageRestricted(object.ageRestricted) {
 
 		date = object.date;
 		location = object.location;
@@ -124,7 +140,6 @@ private:
 
 		eventSoldTickets = object.eventSoldTickets;
 		maxSpectators = object.maxSpectators;
-
 	}
 
 	Event& operator=(const Event& object) {
@@ -192,6 +207,7 @@ private:
 			eventSoldTickets = object.eventSoldTickets;
 			maxSpectators = object.maxSpectators;
 
+
 		}
 		return *this;
 	}
@@ -215,6 +231,277 @@ private:
 		sponsorsNumber = 0;
 		eventSoldTickets = 0;
 		maxSpectators = 0;
+
 	}
+
+
+	string getDate() {
+		return date;
+	}
+	char* getEventName() {
+		if (eventName != nullptr) {
+			char* copy = new char[strlen(eventName) + 1];
+			strcpy_s(copy, strlen(eventName) + 1, eventName);
+			return copy;
+		}
+		return nullptr;
+	}
+
+	string* getEventOrganizers() {
+		if (eventOrganizers != nullptr && organizersNumber > 0) {
+			string* copy = new string[organizersNumber];
+			for (int i = 0; i < organizersNumber; ++i) {
+				copy[i] = eventOrganizers[i];
+			}
+			return copy;
+		}
+		return nullptr;
+	}
+
+	string* getEventParticipants() {
+		if (eventParticipants != nullptr && participantsNumber > 0) {
+			string* copy = new string[participantsNumber];
+			for (int i = 0; i < participantsNumber; ++i) {
+				copy[i] = eventParticipants[i];
+			}
+			return copy;
+		}
+		return nullptr;
+	}
+
+	string* getEventParticipants() {
+		if (eventSponsors != nullptr && sponsorsNumber > 0) {
+			string* copy = new string[sponsorsNumber];
+			for (int i = 0; i < sponsorsNumber; ++i) {
+				copy[i] = eventSponsors[i];
+			}
+			return copy;
+		}
+		return nullptr;
+	}
+	int getDay() {
+		return stoi(day);
+	}
+	int getMonth() {
+		return stoi(month);
+	}
+	int getYear() {
+		return stoi(year);
+	}
+	int getOrganizersNumber() {
+		return organizersNumber;
+	}
+	int getParticipantsNumber() {
+		return participantsNumber;
+	}
+	int getSponsorsNumber() {
+		return sponsorsNumber;
+	}
+	int getMaxSpectators() {
+		return maxSpectators;
+	}
+	int getRestrictedAge() {
+		return ageRestricted;
+	}
+	long long getSoldTickets() {
+		return eventSoldTickets;
+	}
+
+
+
+	void setDate(const int day, const int month, const int year) {
+		Helpers helper;
+		if (helper.dateIsValid(day, month, year)) {
+			this->day = day;
+			this->month = month;
+			this->year = year;
+			date = to_string(day) + '-' + to_string(month) + '-' + to_string(year);
+		}
+	}
+
+	void setEventName(const char* input) {
+		if (input != nullptr) {
+			this->eventName = new char[strlen(input) + 1];
+			strcpy_s(this->eventName, strlen(input) + 1, input);
+		}
+	}
+
+	void setEventOrganizers(const string* input, int nr) {
+		if (input != nullptr && nr > 0) {
+			if (eventOrganizers != nullptr) {
+				delete[] eventOrganizers;
+				organizersNumber = 0;
+			}
+			eventOrganizers = new string[nr];
+			for (int i = 0; i < nr; ++i) {
+				eventOrganizers[i] = input[i];
+			}
+			organizersNumber = nr;
+		}
+	}
+
+	void setEventParticipants(const string* input, int nr) {
+		if (input != nullptr && nr > 0) {
+			if (eventParticipants != nullptr) {
+				delete[] eventParticipants;
+				participantsNumber = 0;
+			}
+			eventParticipants = new string[nr];
+			for (int i = 0; i < nr; ++i) {
+				eventParticipants[i] = input[i];
+			}
+			participantsNumber = nr;
+		}
+	}
+
+	void setEventSponsors(const string* input, int nr) {
+		if (input != nullptr && nr > 0) {
+			if (eventSponsors != nullptr) {
+				delete[] eventSponsors;
+				sponsorsNumber = 0;
+			}
+			eventSponsors = new string[nr];
+			for (int i = 0; i < nr; ++i) {
+				eventSponsors[i] = input[i];
+			}
+			sponsorsNumber = nr;
+		}
+	}
+
+	int sellTickets(int nr) {
+		eventSoldTickets += nr;
+	}
+
+	int totalSoldTickets(const Event* obj, int nr) {
+		if (obj != nullptr && nr > 0) {
+			unsigned int cnt = 0;
+			for (int i = 0; i < nr; ++i) {
+				cnt += obj[i].eventSoldTickets;
+			}
+			return cnt;
+		}
+		return 0;
+	}
+
+	string eventWithMostSoldTickets(const  Event* obj, int nr) {
+		if (obj != nullptr && nr > 0) {
+			unsigned int maxValue = 0;
+			string answer;
+			for (int i = 0; i < nr; ++i) {
+				if (obj[i].eventSoldTickets > maxValue) {
+					maxValue = obj[i].eventSoldTickets;
+					answer = obj[i].eventName;
+				}
+			}
+			return answer;
+		}
+		return "Undefined";
+	}
+
+	friend ostream& operator<<(ostream& out, Event obj);
+	friend istream& operator>>(istream& in, Event& obj);
+
 };
 
+ostream& operator<<(ostream& out, Event obj)
+{
+	out << "The event is taking place on: " << obj.date << endl;
+	out << obj.location;
+	if (obj.eventName != nullptr) {
+		string x = obj.eventName;
+		out << endl << x;
+	}
+	if (obj.eventOrganizers != nullptr && obj.organizersNumber > 0) {
+		out << endl << "The event organizers are: ";
+		for (int i = 0; i < obj.organizersNumber; ++i) {
+			out << " " << obj.eventOrganizers[i] << " ";
+		}
+	}
+	if (obj.eventParticipants != nullptr && obj.participantsNumber > 0) {
+		out << endl << "The event participants are: ";
+		for (int i = 0; i < obj.participantsNumber; ++i) {
+			out << " " << obj.eventParticipants[i] << " ";
+		}
+	}
+	if (obj.eventSponsors != nullptr && obj.sponsorsNumber > 0) {
+		out << endl << "The event sponsors are: ";
+		for (int i = 0; i < obj.sponsorsNumber; ++i) {
+			out << " " << obj.eventSponsors[i] << " ";
+		}
+	}
+
+	if (obj.eventSoldTickets > 0) {
+		out << endl << "The event sold " << obj.eventSoldTickets << " tickets!";
+	}
+
+	out << "The event will have maximum " << obj.maxSpectators << " spectators!" << endl;
+	out << "The age restriction is: " << obj.ageRestricted << endl;
+
+	return out;
+}
+
+istream& operator>>(istream& in, Event& obj)
+{
+	int day, year, month;
+	Location object;
+	string eName;
+	int orgNr, partNr, sponsNr;
+	string* evOrg;
+	string* evPart;
+	string* evSpons;
+	int maxSpectators;
+	cout << "Enter the date of the event DD MM YYYY:" << endl;
+	in >> day >> year >> month;
+	obj.setDate(day, year, month);
+	in >> object;
+	cout << "Enter the name of the event: ";
+	getline(in, eName);
+	obj.setEventName(eName.c_str());
+	cout << endl << "How many event organizers are? - ";
+	in >> orgNr;
+	if (orgNr > 0) {
+		cout << endl << "Name the organizers one by one: ";
+		evOrg = new string[orgNr];
+		for (int i = 0; i < orgNr; ++i) {
+			getline(in, evOrg[i]);
+			cout << endl;
+		}
+		obj.setEventOrganizers(evOrg, orgNr);
+	}
+	cout << endl << "How many event participants are? - ";
+	in >> partNr;
+	if (partNr > 0) {
+		cout << endl << "Name the participants one by one: ";
+		evPart = new string[partNr];
+		for (int i = 0; i < partNr; ++i) {
+			getline(in, evPart[i]);
+			cout << endl;
+
+		}
+		obj.setEventOrganizers(evPart, partNr);
+	}
+	cout << endl << "How many event sponsors are? - ";
+	in >> sponsNr;
+	if (sponsNr > 0) {
+		cout << endl << "Name the sponsors one by one: ";
+		evSpons = new string[sponsNr];
+		for (int i = 0; i < sponsNr; ++i) {
+			getline(in, evSpons[i]);
+			cout << endl;
+		}
+		obj.setEventOrganizers(evSpons, sponsNr);
+	}
+	cout << "Now introduce the maximum number of spectators(not greather than: " << object.getMaxCapacity() << ") - ";
+	in >> maxSpectators;
+	if (maxSpectators <= object.getMaxCapacity()) {
+		obj.maxSpectators = maxSpectators;
+	}
+	return in;
+}
+
+//Event eventDetails;
+//string* types;
+//int* price;
+//unsigned int typesNumber;
+//unsigned long long uniqueID;
+//int* ticketDistribution;

@@ -21,27 +21,46 @@ public:
 		for (int i = 0; i < input.length(); ++i) {
 			c = input.at(i);
 			if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
-				throw invalid_argument("Only letters accepted");
+				return "Only letters accepted";
 		}
 
 		return input;
 	}
 
-	// de verificat ca probabil sigur n o sa mearga
-	// throw exception inlocuieste un return deci nu prea i pont
 	string readStringWithOnlyLettersUntilTrue() {
 		unsigned int cnt = 0;
 		string input;
 		while (cnt < 5) {
 			++cnt;
-			try {
-				return input = readStringWithOnlyLetters();
-			}
-			catch (invalid_argument& e) {
-				cout << e.what() << endl;
-			}
+			input = readStringWithOnlyLetters();
+			if (input != "Only letters accepted")
+				return input;
+
 		}
-		return 0;
+		return "Contains Numbers";
 	}
+
+	bool dateIsValid(int day, int month, int year) {
+		if (year < 0) {
+			return false;
+		}
+		if (month > 12 || month < 1) {
+			return false;
+		}
+		if (day > 31 || day < 1) {
+			return false;
+		}
+		if ((day == 31 &&
+			(month == 2 || month == 4 || month == 6 || month == 9 || month == 11))) {
+
+			return false;
+		}
+		if (day == 30 && month == 2) {
+			return false;
+		}
+		return true;
+	}
+
+
 };
 
