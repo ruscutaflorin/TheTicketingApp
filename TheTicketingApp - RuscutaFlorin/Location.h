@@ -279,28 +279,6 @@ public:
 
 	}
 
-	Location operator--() {
-		maxCapacity--;
-		return *this;
-	}
-
-	Location operator--(int i) {
-		Location copy = *this;
-		maxCapacity--;
-		return copy;
-	}
-
-	operator string* () {
-		if (zones != nullptr && nrZones > 0) {
-			string* copy = new string[nrZones];
-			for (int i = 0; i < nrZones; ++i) {
-				copy[i] = zones[i];
-			}
-			return copy;
-		}
-		return nullptr;
-	}
-
 	friend ostream& operator<<(ostream& out, Location obj);
 	friend istream& operator>>(istream& in, Location& obj);
 

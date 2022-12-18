@@ -398,22 +398,6 @@ public:
 		return "Undefined";
 	}
 
-	// daca exista sau nu nr max de spectatori.
-	bool operator!() {
-		return maxSpectators <= 0;
-	}
-
-	Event operator++() {
-		eventSoldTickets++;
-		return *this;
-	}
-
-	Event operator++(int i) {
-		Event copy = *this;
-		eventSoldTickets++;
-		return copy;
-	}
-
 	friend ostream& operator<<(ostream& out, Event obj);
 	friend istream& operator>>(istream& in, Event& obj);
 
@@ -515,3 +499,9 @@ istream& operator>>(istream& in, Event& obj)
 	return in;
 }
 
+//Event eventDetails;
+//string* types;
+//int* price;
+//unsigned int typesNumber;
+//unsigned long long uniqueID;
+//int* ticketDistribution;
