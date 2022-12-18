@@ -30,6 +30,7 @@ public:
 	}
 
 	Tickets(const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject) :Tickets() {};
+
 	Tickets(const Tickets& object);
 
 	Tickets& operator=(const Tickets& object);
