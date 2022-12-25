@@ -1,11 +1,13 @@
 #pragma once
 #include <iostream>
 #include <string>
+
 using namespace std;
 class buildingStructure
 {
-	friend class Location;
 
+	friend class Location;
+	friend class Event;
 private:
 	int** zoneStructure;
 	int nrRows;
@@ -15,11 +17,11 @@ public:
 
 	buildingStructure();
 
-	buildingStructure(const int** zoneStructure, const int nrRows, const int nrColumns) :buildingStructure() {};
+	buildingStructure(const int**, const int, const int);
 
-	buildingStructure(const buildingStructure& object);
+	buildingStructure(const buildingStructure&);
 
-	buildingStructure& operator=(const buildingStructure& object);
+	buildingStructure& operator=(const buildingStructure&);
 
 	~buildingStructure();
 
@@ -30,13 +32,13 @@ public:
 
 	int getNrColumns();
 
-	void setEmptyZone(const int nrColumns, const int nrRows);
+	void setEmptyZone(const int, const int);
 
-	void setZoneStructure(const int** zoneStructure, const int nrColumns, const int nrRows);
+	void setZoneStructure(const int**, const int, const int);
 
 	int availableCapacity();
 
-	string generateSeatID(const int zoneNumber, const int row, const int column);
+	string generateSeatID(const int, const int, const int);
 
 	friend ostream& operator<<(ostream& out, buildingStructure obj);
 	friend istream& operator>>(istream& in, buildingStructure& obj);

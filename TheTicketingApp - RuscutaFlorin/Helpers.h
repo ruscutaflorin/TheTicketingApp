@@ -1,10 +1,13 @@
 #pragma once
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 class Helpers
 {
+	friend class Location;
+
 public:
 
 	string readString();

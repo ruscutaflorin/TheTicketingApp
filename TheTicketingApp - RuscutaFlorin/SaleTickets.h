@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "Tickets.h"
 
+#include "Event.h"
 using namespace std;
 
 
@@ -22,11 +22,11 @@ public:
 
 	SaleTickets(const string clientName, const string identityDocumentNumber, const unsigned int clientAge, const unsigned int purchasedTickets, const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject) : Tickets(typesNumber, types, ticketDistribution, price, eventObject) {};
 
-	static long long averageTicketSales(const SaleTickets* tickets, const unsigned int nrObjects);
+	static long long averageTicketSales(const SaleTickets*, const unsigned int);
 
 	static long long getAllTimeSoldTickets();
 
-	static void incrementallTimeSoldTickets(const int nr);
+	static void incrementallTimeSoldTickets(const int);
 
 };
 

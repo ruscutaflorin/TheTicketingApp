@@ -6,7 +6,7 @@ buildingStructure::buildingStructure() {
 	nrColumns = 0;
 }
 
-buildingStructure::buildingStructure(const int** zoneStructure, const int nrRows, const int nrColumns) : buildingStructure() {
+buildingStructure::buildingStructure(const int** zoneStructure, const int nrRows, const int nrColumns) {
 	if (nrRows > 0 && nrColumns > 0 && zoneStructure != nullptr) {
 		this->zoneStructure = new int* [nrRows];
 		for (int j = 0; j < nrRows; ++j) {
@@ -14,6 +14,11 @@ buildingStructure::buildingStructure(const int** zoneStructure, const int nrRows
 		}
 		this->nrRows = nrRows;
 		this->nrColumns = nrColumns;
+	}
+	else {
+		this->zoneStructure = nullptr;
+		this->nrRows = 0;
+		this->nrColumns = 0;
 	}
 }
 
@@ -208,7 +213,6 @@ ostream& operator<<(ostream& out, buildingStructure obj)
 istream& operator>>(istream& in, buildingStructure& obj)
 {
 	int rows, columns;
-	int** structure;
 	cout << "Rows Number: ";
 	in >> rows;
 	cout << endl << "Columns Number: ";

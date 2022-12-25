@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <cstring>
-#include "Event.h"
 #include "buildingStructure.h"
 
 using namespace std;
 
 class Location
 {
+
 	friend class Event;
 
 private:
@@ -21,12 +21,13 @@ private:
 
 public:
 
-	Location() :city("Unspecified") {};
-	Location(const string city, const string address, const string* zones, const int nrZones, buildingStructure* object);
+	Location();
 
-	Location(const Location& object);
+	Location(const string, const string, const string*, const int, buildingStructure*);
 
-	Location& operator=(const Location& object);
+	Location(const Location&);
+
+	Location& operator=(const Location&);
 
 	~Location();
 
@@ -40,15 +41,15 @@ public:
 
 	string* getZones();
 
-	void setCity(const string input);
+	void setCity(const string);
 
-	void setAddress(const string input);
+	void setAddress(const string);
 
-	void setZones(const string* input, const int nr);
+	void setZones(const string*, const int);
 
-	static int locationCapacity(buildingStructure* object, int objectNumber);
+	static int locationCapacity(buildingStructure*, int);
 
-	int** maxSeatsNextToEachotherForEachSector(buildingStructure* object, int objectNumber);
+	int** maxSeatsNextToEachotherForEachSector(buildingStructure* object, int);
 
 	Location operator--();
 

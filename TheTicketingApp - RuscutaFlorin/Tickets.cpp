@@ -1,4 +1,10 @@
 #include "Tickets.h"
+#include "Location.h"
+#include "Helpers.h"
+#include "buildingStructure.h"
+#include "Event.h"
+
+using namespace std;
 
 Tickets::Tickets() {
 	types = nullptr;
@@ -9,7 +15,8 @@ Tickets::Tickets() {
 	uniqueID = rand();
 }
 
-Tickets::Tickets(const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject) :Tickets() {
+Tickets::Tickets(const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject)
+	:Tickets() {
 	if (typesNumber > 0 && types != nullptr && price != nullptr) {
 		this->types = new string[typesNumber];
 		this->price = new int[typesNumber];

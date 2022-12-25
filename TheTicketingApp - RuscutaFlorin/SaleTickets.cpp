@@ -1,5 +1,7 @@
 #include "SaleTickets.h"
 
+
+
 SaleTickets::SaleTickets() {
 	clientAge = 0;
 	identityDocumentNumber = "Undefined";

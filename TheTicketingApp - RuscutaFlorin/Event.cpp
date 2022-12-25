@@ -1,4 +1,9 @@
 #include "Event.h"
+#include "Helpers.h"
+#include "Location.h"
+#include <string>
+
+using namespace std;
 
 Event::Event() :ageRestricted(18) {
 	date = "Undefined";
@@ -11,9 +16,12 @@ Event::Event() :ageRestricted(18) {
 	sponsorsNumber = 0;
 	eventSoldTickets = 0;
 	maxSpectators = 0;
-}
+};
 
-Event::Event(const string day, const string month, const string year, const char* eventName, const string* eventOrganizers, const  int organizersNumber, const string* eventParticipants, const  int participantsNumber, const string* eventSponsors, const  int sponsorsNumber, const long long eventSoldTickets, const  int maxSpectators, const  int ageRestricted, const Location locationObject) :ageRestricted(ageRestricted) {
+
+Event::Event(const string day, const string month, const string year, const char* eventName, const string* eventOrganizers, const  int organizersNumber, const string* eventParticipants, const  int participantsNumber, const string* eventSponsors, const  int sponsorsNumber, const long long eventSoldTickets, const int maxSpectators, const int ageRestricted, const Location locationObject)
+	:ageRestricted(ageRestricted)
+{
 
 	this->day = day;
 	this->month = month;
@@ -233,16 +241,6 @@ string* Event::getEventOrganizers() {
 	return nullptr;
 }
 
-string* Event::getEventParticipants() {
-	if (eventParticipants != nullptr && participantsNumber > 0) {
-		string* copy = new string[participantsNumber];
-		for (int i = 0; i < participantsNumber; ++i) {
-			copy[i] = eventParticipants[i];
-		}
-		return copy;
-	}
-	return nullptr;
-}
 
 string* Event::getEventParticipants() {
 	if (eventSponsors != nullptr && sponsorsNumber > 0) {
@@ -254,6 +252,7 @@ string* Event::getEventParticipants() {
 	}
 	return nullptr;
 }
+
 int Event::getDay() {
 	return stoi(day);
 }
@@ -343,8 +342,9 @@ void Event::setEventSponsors(const string* input, int nr) {
 	}
 }
 
-int Event::sellTickets(int nr) {
+void Event::sellTickets(int nr) {
 	eventSoldTickets += nr;
+
 }
 
 int Event::totalSoldTickets(const Event* obj, int nr) {

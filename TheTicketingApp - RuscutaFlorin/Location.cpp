@@ -1,4 +1,6 @@
 #include "Location.h"
+#include "buildingStructure.h"
+#include "Helpers.h"
 
 Location::Location() :city("Unspecified") {
 	address = "Unspecified";
@@ -307,7 +309,6 @@ istream& operator>>(istream& in, Location& obj)
 	string address;
 	int nrZones;
 	string* zones;
-	buildingStructure* object = new buildingStructure[nrZones];
 	cout << "In which city is the location placed? ";
 	getline(in, city);
 	obj.setCity(city);

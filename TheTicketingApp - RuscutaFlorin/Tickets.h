@@ -2,12 +2,16 @@
 #include <iostream>
 #include <stdlib.h>     
 #include <time.h>   
-#include "Event.h"
 
 using namespace std;
 
 class Tickets
 {
+	friend class Event;
+	friend class Location;
+	friend class buildingStructure;
+	friend class SafeTickets;
+
 private:
 	Event eventDetails;
 	string* types;
@@ -20,16 +24,9 @@ private:
 
 public:
 
-	Tickets() {
-		types = nullptr;
-		price = nullptr;
-		ticketDistribution = nullptr;
-		typesNumber = 0;
-		srand(time(0));
-		uniqueID = rand();
-	}
+	Tickets();
 
-	Tickets(const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject) :Tickets() {};
+	Tickets(const unsigned int, const string*, const int*, const int*, Event);
 
 	Tickets(const Tickets& object);
 
