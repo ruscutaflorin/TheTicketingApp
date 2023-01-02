@@ -1,5 +1,5 @@
 ﻿#pragma once
-//#include <iostream>
+#include <iostream>
 #include <stdlib.h>     
 #include <time.h>   
 #include "Event.h" // daca o scot dispare eroarea cu class type redefinition
