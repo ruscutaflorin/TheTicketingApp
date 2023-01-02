@@ -1,5 +1,4 @@
 #include "Location.h"
-#include "buildingStructure.h"
 #include "Helpers.h"
 
 Location::Location() :city("Unspecified") {

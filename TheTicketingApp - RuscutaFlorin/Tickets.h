@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include <iostream>
+//#include <iostream>
 #include <stdlib.h>     
 #include <time.h>   
-
+#include "Event.h" // daca o scot dispare eroarea cu class type redefinition
 using namespace std;
 
 class Tickets
@@ -10,7 +10,7 @@ class Tickets
 	friend class Event;
 	friend class Location;
 	friend class buildingStructure;
-	friend class SafeTickets;
+	//friend class SafeTickets;
 
 private:
 	Event eventDetails;

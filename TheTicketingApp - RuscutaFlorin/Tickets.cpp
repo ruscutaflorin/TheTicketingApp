@@ -1,8 +1,5 @@
 #include "Tickets.h"
-#include "Location.h"
 #include "Helpers.h"
-#include "buildingStructure.h"
-#include "Event.h"
 
 using namespace std;
 
