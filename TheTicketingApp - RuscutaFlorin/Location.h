@@ -1,14 +1,11 @@
 #pragma once
 
-//#include <iostream>
 #include <cstring>
 #include "buildingStructure.h"
 
-using namespace std;
 
 class Location
 {
-
 	friend class Event;
 
 private:

@@ -1,17 +1,13 @@
 ﻿#pragma once
-#include <iostream>
+
+#ifndef TICKETS_H
+#define TICKETS_H
+
 #include <stdlib.h>     
 #include <time.h>   
-#include "Event.h" // daca o scot dispare eroarea cu class type redefinition
-using namespace std;
-
+#include "Event.h" 
 class Tickets
 {
-	friend class Event;
-	friend class Location;
-	friend class buildingStructure;
-	//friend class SafeTickets;
-
 private:
 	Event eventDetails;
 	string* types;
@@ -54,7 +50,7 @@ public:
 
 	//Tickets a;
 	// int* x = (int*)a => preturile la bilete ale obiectului a.
-	explicit operator int* ();
+	//explicit operator int* ();
 
 	friend ostream& operator<<(ostream& out, Tickets obj);
 	friend istream& operator>>(istream& in, Tickets& obj);
@@ -65,3 +61,4 @@ ostream& operator<<(ostream& out, Tickets obj);
 
 istream& operator>>(istream& in, Tickets& obj);
 
+#endif

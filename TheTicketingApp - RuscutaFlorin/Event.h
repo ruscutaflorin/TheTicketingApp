@@ -1,11 +1,16 @@
-using namespace std;
+//using namespace std;
 //#include <iostream>
 //#include <cstring>
+
+#ifndef EVENT_H
+#define EVENT_H
+
 #include "Location.h"
 
 class Event
 {
-	//friend class Tickets;
+	friend class Tickets;
+
 private:
 	string date, day, year, month;
 	Location location;
@@ -82,3 +87,5 @@ public:
 
 ostream& operator<<(ostream& out, Event obj);
 istream& operator>>(istream& in, Event& obj);
+
+#endif

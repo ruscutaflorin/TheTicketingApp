@@ -1,8 +1,6 @@
 #include "Tickets.h"
 #include "Helpers.h"
 
-using namespace std;
-
 Tickets::Tickets() {
 	types = nullptr;
 	price = nullptr;
@@ -203,16 +201,16 @@ int Tickets::operator[](const string ticketType) {
 }
 //Tickets a;
 // int* x = (int*)a => preturile la bilete ale obiectului a.
-explicit  Tickets::operator int* () {
-	if (price != nullptr && typesNumber > 0) {
-		int* copy = new int[typesNumber];
-		for (int i = 0; i < typesNumber; ++i) {
-			copy[i] = price[i];
-		}
-		return copy;
-	}
-	return nullptr;
-}
+//explicit Tickets::operator int* () {
+//	if (price != nullptr && typesNumber > 0) {
+//		int* copy = new int[typesNumber];
+//		for (int i = 0; i < typesNumber; ++i) {
+//			copy[i] = price[i];
+//		}
+//		return copy;
+//	}
+//	return nullptr;
+//}
 
 
 ostream& operator<<(ostream& out, Tickets obj)

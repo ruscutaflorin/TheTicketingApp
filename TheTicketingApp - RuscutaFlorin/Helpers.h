@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 
+#ifndef HELPERS_H
+#define HELPERS_H
+
 using namespace std;
 
 class Helpers
@@ -21,3 +24,4 @@ public:
 
 };
 
+#endif

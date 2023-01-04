@@ -1,13 +1,16 @@
 #pragma once
+
+#ifndef BUILDINGSTRUCTURE_H
+#define BUILDINGSTRUCTURE_H
+
 #include <iostream>
 #include <string>
 
 using namespace std;
 class buildingStructure
 {
-
 	friend class Location;
-	friend class Event;
+
 private:
 	int** zoneStructure;
 	int nrRows;
@@ -49,3 +52,4 @@ ostream& operator<<(ostream& out, buildingStructure obj);
 
 istream& operator>>(istream& in, buildingStructure& obj);
 
+#endif
