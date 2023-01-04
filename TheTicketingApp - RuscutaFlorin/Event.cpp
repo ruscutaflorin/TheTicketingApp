@@ -1,5 +1,7 @@
 #include "Event.h"
 #include "Helpers.h"
+#include "Location.h"
+
 //#include <string>
 
 using namespace std;
@@ -420,7 +422,7 @@ ostream& operator<<(ostream& out, Event obj)
 	if (obj.eventSoldTickets > 0) {
 		out << endl << "The event sold " << obj.eventSoldTickets << " tickets!";
 	}
-
+	out << endl;
 	out << "The event will have maximum " << obj.maxSpectators << " spectators!" << endl;
 	out << "The age restriction is: " << obj.ageRestricted << endl;
 

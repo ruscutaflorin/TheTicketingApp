@@ -1,5 +1,7 @@
 #include "Location.h"
 #include "Helpers.h"
+#include "buildingStructure.h"
+#include <cstring>
 
 Location::Location() :city("Unspecified") {
 	address = "Unspecified";
@@ -134,9 +136,9 @@ Location::~Location() {
 	if (zones != nullptr) {
 		delete[] zones;
 	}
-	if (obj != nullptr) {
+	/*if (obj != nullptr) {
 		delete[] obj;
-	}
+	}*/
 	nrZones = 0;
 	maxCapacity = 0;
 
@@ -285,7 +287,7 @@ Location::operator string* () {
 ostream& operator<<(ostream& out, Location obj)
 {
 	if (obj.city != "") {
-		out << "The location is placed in: " << obj.city;
+		out << endl << "The location is placed in: " << obj.city;
 	}
 	if (obj.address != "") {
 		out << endl << "The address is: " << obj.address;

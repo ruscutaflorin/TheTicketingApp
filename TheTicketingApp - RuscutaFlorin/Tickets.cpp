@@ -1,5 +1,8 @@
 #include "Tickets.h"
 #include "Helpers.h"
+#include "Event.h" 
+#include <stdlib.h>     
+#include <time.h>    
 
 Tickets::Tickets() {
 	types = nullptr;

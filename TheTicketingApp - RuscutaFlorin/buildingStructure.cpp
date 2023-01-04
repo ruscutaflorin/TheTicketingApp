@@ -1,4 +1,5 @@
 #include "buildingStructure.h"
+#include <string>
 
 buildingStructure::buildingStructure() {
 	zoneStructure = nullptr;
@@ -204,7 +205,7 @@ ostream& operator<<(ostream& out, buildingStructure obj)
 		out << "Total available capacity is: " << obj.availableCapacity();
 	}
 	else {
-		out << "There is nothing into the object!";
+		out << "There is nothing into the object!" << endl;
 	}
 
 	return out;
