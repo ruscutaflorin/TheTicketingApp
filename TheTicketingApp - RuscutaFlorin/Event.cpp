@@ -6,6 +6,8 @@
 
 using namespace std;
 
+// o lista de evenimente stl facuta static 
+
 Event::Event() :ageRestricted(18) {
 	date = "Undefined";
 	eventName = nullptr;

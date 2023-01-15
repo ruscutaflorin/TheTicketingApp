@@ -12,6 +12,8 @@ class Event
 	friend class Tickets;
 
 private:
+
+	// o lista de evenimente stl facuta static 
 	string date, day, year, month;
 	Location location;
 	char* eventName;
@@ -24,6 +26,7 @@ private:
 	long long eventSoldTickets;
 	int maxSpectators;
 	const int ageRestricted;
+
 	// de facut verificari cu location.maxCapacity si maxSpectators in main
 
 public:

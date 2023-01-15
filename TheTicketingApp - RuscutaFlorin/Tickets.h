@@ -50,7 +50,7 @@ public:
 
 	//Tickets a;
 	// int* x = (int*)a => preturile la bilete ale obiectului a.
-	//explicit operator int* ();
+	explicit operator int* ();
 
 	friend ostream& operator<<(ostream& out, Tickets obj);
 	friend istream& operator>>(istream& in, Tickets& obj);

@@ -20,7 +20,7 @@ public:
 
 	Location();
 
-	Location(const string, const string, const string*, const int, buildingStructure*);
+	Location(const string, const string, const string*, const int, const buildingStructure*);
 
 	Location(const Location&);
 
@@ -62,3 +62,4 @@ public:
 ostream& operator<<(ostream& out, Location obj);
 
 istream& operator>>(istream& in, Location& obj);
+

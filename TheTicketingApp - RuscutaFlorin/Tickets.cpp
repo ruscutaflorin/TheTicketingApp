@@ -30,7 +30,7 @@ Tickets::Tickets(const unsigned int typesNumber, const string* types, const int*
 }
 
 Tickets::Tickets(const Tickets& object) {
-	if (object.typesNumber > 0 && object.types != nullptr && object.price != nullptr && ticketDistribution != nullptr) {
+	if (object.typesNumber > 0 && object.types != nullptr && object.price != nullptr && object.ticketDistribution != nullptr) {
 		types = new string[object.typesNumber];
 		price = new int[object.typesNumber];
 		ticketDistribution = new int[object.typesNumber];
@@ -56,16 +56,16 @@ Tickets& Tickets::operator=(const Tickets& object) {
 		if (object.typesNumber > 0 && object.types != nullptr && object.price != nullptr && object.ticketDistribution != nullptr) {
 			if (types != nullptr) {
 				delete[] types;
-				typesNumber = 0;
+				//typesNumber = 0;
 			}
 			if (price != nullptr) {
 				delete[] price;
-				typesNumber = 0;
+				//typesNumber = 0;
 			}
 
 			if (ticketDistribution != nullptr) {
 				delete[] ticketDistribution;
-				typesNumber = 0;
+				//typesNumber = 0;
 			}
 
 			types = new string[object.typesNumber];
@@ -200,20 +200,20 @@ int Tickets::operator[](const string ticketType) {
 				return price[i];
 		}
 	}
-	return 0;
+	return -1;
 }
 //Tickets a;
 // int* x = (int*)a => preturile la bilete ale obiectului a.
-//explicit Tickets::operator int* () {
-//	if (price != nullptr && typesNumber > 0) {
-//		int* copy = new int[typesNumber];
-//		for (int i = 0; i < typesNumber; ++i) {
-//			copy[i] = price[i];
-//		}
-//		return copy;
-//	}
-//	return nullptr;
-//}
+Tickets::operator int* () {
+	if (price != nullptr && typesNumber > 0) {
+		int* copy = new int[typesNumber];
+		for (int i = 0; i < typesNumber; ++i) {
+			copy[i] = price[i];
+		}
+		return copy;
+	}
+	return nullptr;
+}
 
 
 ostream& operator<<(ostream& out, Tickets obj)

@@ -8,9 +8,10 @@ Location::Location() :city("Unspecified") {
 	zones = nullptr;
 	nrZones = 0;
 	maxCapacity = 0;
+	obj = nullptr;
 }
 
-Location::Location(const string city, const string address, const string* zones, const int nrZones, buildingStructure* object) {
+Location::Location(const string city, const string address, const string* zones, const int nrZones, const buildingStructure* object) {
 	if (city != "") {
 		this->city = city;
 	}
@@ -20,8 +21,9 @@ Location::Location(const string city, const string address, const string* zones,
 	else {
 		this->address = "Unspecified";
 	}
-	if (nrZones > 0 && zones != nullptr) {
-		delete[] this->zones;
+	if (nrZones > 0 && zones != nullptr && object != nullptr) {
+		if (this->zones != nullptr && this->nrZones > 0)
+			delete[] this->zones;
 		this->zones = new string[nrZones];
 		for (int i = 0; i < nrZones; ++i) {
 			this->zones[i] = zones[i];
@@ -31,13 +33,15 @@ Location::Location(const string city, const string address, const string* zones,
 	else {
 		this->zones = nullptr;
 		this->nrZones = 0;
+		this->obj = nullptr;
 	}
 
 	if (object != nullptr && nrZones > 0) {
+		obj = new buildingStructure[nrZones];
 		for (int i = 0; i < nrZones; ++i) {
 			obj[i].zoneStructure = new int* [object[i].nrRows];
 			maxCapacity += object[i].nrRows * object[i].nrColumns;
-			for (int j = 0; j < nrZones; ++j) {
+			for (int j = 0; j < object[i].nrColumns; ++j) {
 				obj[i].zoneStructure[j] = new int[object[i].nrColumns];
 			}
 		}
@@ -51,26 +55,27 @@ Location::Location(const string city, const string address, const string* zones,
 Location::Location(const Location& object) {
 	city = object.city;
 	address = object.address;
+	maxCapacity = object.maxCapacity;
 	if (object.zones != nullptr && object.nrZones > 0 && object.obj != nullptr) {
-		zones = new string[nrZones];
+		zones = new string[object.nrZones];
 		for (int i = 0; i < object.nrZones; ++i) {
 			zones[i] = object.zones[i];
 		}
-
 		nrZones = object.nrZones;
+		obj = new buildingStructure[nrZones];
 		for (int i = 0; i < nrZones; ++i) {
 			obj[i].zoneStructure = new int* [object.obj[i].nrRows];
 			maxCapacity += object.obj[i].nrRows * object.obj[i].nrColumns;
-			for (int j = 0; j < nrZones; ++j) {
+			for (int j = 0; j < object.obj[i].nrColumns; ++j) {
 				obj[i].zoneStructure[j] = new int[object.obj[i].nrColumns];
 			}
 		}
 		for (int k = 0; k < nrZones; ++k) {
-			for (int i = 0; i < nrZones; ++i) {
-				for (int j = 0; j < nrZones; ++i) {
+			for (int i = 0; i < object.obj[k].nrRows; ++i) {
+				for (int j = 0; j < object.obj[k].nrColumns; ++j) {
 					obj[k].zoneStructure[i][j] = object.obj[k].zoneStructure[i][j];
-				}
 
+				}
 			}
 		}
 	}
@@ -81,6 +86,40 @@ Location::Location(const Location& object) {
 		maxCapacity = 0;
 	}
 }
+//Location::Location(const Location& object) {
+//	city = object.city;
+//	address = object.address;
+//	maxCapacity = object.maxCapacity;
+//	if (object.zones != nullptr && object.nrZones > 0 && object.obj != nullptr) {
+//		zones = new string[object.nrZones];
+//		for (int i = 0; i < object.nrZones; ++i) {
+//			zones[i] = object.zones[i];
+//		}
+//		nrZones = object.nrZones;
+//		obj = new buildingStructure[nrZones];
+//		for (int i = 0; i < nrZones; ++i) {
+//			obj[i].zoneStructure = new int* [object.obj[i].nrRows];
+//			maxCapacity += object.obj[i].nrRows * object.obj[i].nrColumns;
+//			for (int j = 0; j < object.obj[i].nrColumns; ++j) {
+//				obj[i].zoneStructure[j] = new int[object.obj[i].nrColumns];
+//			}
+//		}
+//		for (int k = 0; k < nrZones; ++k) {
+//			for (int i = 0; i < object.obj[k].nrRows; ++i) {
+//				for (int j = 0; j < object.obj[k].nrColumns; ++j) {
+//					obj[k].zoneStructure[i][j] = object.obj[k].zoneStructure[i][j]; // pica pe ex 3 1
+//				}
+//			}
+//		}
+//	}
+//	else {
+//		zones = nullptr;
+//		nrZones = 0;
+//		obj = nullptr;
+//		maxCapacity = 0;
+//	}
+//}
+//
 
 Location& Location::operator=(const Location& object) {
 	if (this != &object) {
@@ -89,10 +128,9 @@ Location& Location::operator=(const Location& object) {
 		if (object.zones != nullptr && object.nrZones > 0 && object.obj != nullptr) {
 			if (zones != nullptr) {
 				delete[] zones;
-				nrZones = 0;
 			}
 
-			zones = new string[nrZones];
+			zones = new string[object.nrZones];
 			for (int i = 0; i < object.nrZones; ++i) {
 				zones[i] = object.zones[i];
 			}
@@ -103,16 +141,18 @@ Location& Location::operator=(const Location& object) {
 				delete[] obj;
 			}
 
+			obj = new buildingStructure[nrZones];
+
 			for (int i = 0; i < nrZones; ++i) {
 				obj[i].zoneStructure = new int* [object.obj[i].nrRows];
 				maxCapacity += object.obj[i].nrRows * object.obj[i].nrColumns;
-				for (int j = 0; j < nrZones; ++j) {
+				for (int j = 0; j < object.obj[i].nrColumns; ++j) {
 					obj[i].zoneStructure[j] = new int[object.obj[i].nrColumns];
 				}
 			}
 			for (int k = 0; k < nrZones; ++k) {
-				for (int i = 0; i < nrZones; ++i) {
-					for (int j = 0; j < nrZones; ++i) {
+				for (int i = 0; i < object.obj[k].nrRows; ++i) {
+					for (int j = 0; j < object.obj[k].nrColumns; ++j) {
 						obj[k].zoneStructure[i][j] = object.obj[k].zoneStructure[i][j];
 					}
 
@@ -129,16 +169,63 @@ Location& Location::operator=(const Location& object) {
 	}
 	return *this;
 }
-
+//Location& Location::operator=(const Location& object) {
+//	if (this != &object) {
+//		address = object.address;
+//		city = object.city;
+//		if (object.zones != nullptr && object.nrZones > 0 && object.obj != nullptr) {
+//			if (zones != nullptr && nrZones > 0) {
+//				for (int i = 0; i < nrZones; ++i) {
+//					delete[] obj[i].zoneStructure;
+//				}
+//				delete[] zones;
+//				delete[] obj;
+//			}
+//			zones = new string[object.nrZones];
+//			for (int i = 0; i < object.nrZones; ++i) {
+//				zones[i] = object.zones[i];
+//			}
+//			nrZones = object.nrZones;
+//			obj = new buildingStructure[nrZones];
+//			for (int i = 0; i < nrZones; ++i) {
+//				obj[i].zoneStructure = new int* [object.obj[i].nrRows];
+//				maxCapacity = 0;
+//				maxCapacity += object.obj[i].nrRows * object.obj[i].nrColumns;
+//				for (int j = 0; j < object.obj[i].nrColumns; ++j) {
+//					obj[i].zoneStructure[j] = new int[object.obj[i].nrColumns];
+//				}
+//			}
+//			for (int k = 0; k < nrZones; ++k) {
+//				for (int i = 0; i < object.obj[k].nrRows; ++i) {
+//					for (int j = 0; j < object.obj[k].nrColumns; ++j) {
+//						obj[k].zoneStructure[i][j] = object.obj[k].zoneStructure[i][j];
+//					}
+//				}
+//			}
+//		}
+//		else {
+//			if (zones != nullptr && nrZones > 0) {
+//				for (int i = 0; i < nrZones; ++i) {
+//					delete[] obj[i].zoneStructure;
+//				}
+//				delete[] obj;
+//				delete[] zones;
+//			}
+//			zones = nullptr;
+//			obj = nullptr;
+//			nrZones = 0;
+//			maxCapacity = 0;
+//		}
+//	}
+//	return *this;
+//}
 
 Location::~Location() {
 
 	if (zones != nullptr) {
 		delete[] zones;
 	}
-	/*if (obj != nullptr) {
-		delete[] obj;
-	}*/
+
 	nrZones = 0;
 	maxCapacity = 0;
 
@@ -177,7 +264,6 @@ string* Location::getZones() {
 	if (obj != nullptr && nrZones > 0) {
 		buildingStructure* object = new buildingStructure[nrZones];
 		cin >> object;
-		plm;
 
 	}
 	else {
@@ -290,10 +376,10 @@ ostream& operator<<(ostream& out, Location obj)
 		out << endl << "The location is placed in: " << obj.city;
 	}
 	if (obj.address != "") {
-		out << endl << "The address is: " << obj.address;
+		out << endl << "The address is: " << obj.address << endl;
 	}
-	if (obj.zones != nullptr && obj.nrZones > 0) {
-		out << "The location has " << obj.nrZones << " sectors and its maximum capacity is: " << obj.maxCapacity << endl;
+	if (obj.zones != nullptr && obj.nrZones > 0 && obj.obj != nullptr) {
+		out << "The location has " << obj.nrZones << " sectors and its maximum capacity is: " << obj.maxCapacity << endl;;
 		for (int i = 0; i < obj.nrZones; ++i) {
 			out << i + 1 << " - " << obj.zones[i] << endl;
 		}
@@ -316,19 +402,23 @@ istream& operator>>(istream& in, Location& obj)
 	cout << endl << "Type the address here: ";
 	getline(in, address);
 	obj.setAddress(address);
-	cout << endl << "How many sectors your location has? (> 0)";
+	cout << endl << "How many sectors your location has? (> 0) -> ";
 	in >> nrZones;
 	if (nrZones > 0) {
-		buildingStructure* object = new buildingStructure[nrZones];
 		zones = new string[nrZones];
 		cout << endl << "Name your sectors: " << endl;
+		getline(in, zones[0]);
 		for (int i = 0; i < nrZones; ++i) {
 			getline(in, zones[i]);
-			cout << zones[i] << endl;
 		}
 		obj.setZones(zones, nrZones);
 		for (int i = 0; i < nrZones; ++i) {
-			cin >> object[i];
+			cout << "\nSet the dimensions of the zone " << i + 1 << "! -> ";
+			obj.obj = new buildingStructure[nrZones];
+			in >> obj.obj[i];
+			cout << endl;
+			cout << obj.obj[i];
+			cout << endl;
 		}
 	}
 
