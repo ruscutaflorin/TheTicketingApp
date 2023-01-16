@@ -14,13 +14,13 @@ private:
 	string* zones;
 	int nrZones;
 	int maxCapacity;
-	buildingStructure* obj;
+	vector<buildingStructure> obj;
 
 public:
 
 	Location();
 
-	Location(const string, const string, const string*, const int, const buildingStructure*);
+	Location(const string, const string, const string*, const int, const vector<buildingStructure>);
 
 	Location(const Location&);
 
@@ -44,9 +44,9 @@ public:
 
 	void setZones(const string*, const int);
 
-	static int locationCapacity(buildingStructure*, int);
+	static int locationCapacity(const vector<buildingStructure>);
 
-	int** maxSeatsNextToEachotherForEachSector(buildingStructure* object, int);
+	int** maxSeatsNextToEachotherForEachSector(const vector<buildingStructure> object);
 
 	Location operator--();
 

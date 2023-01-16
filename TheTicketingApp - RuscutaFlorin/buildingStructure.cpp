@@ -1,143 +1,85 @@
 #include "buildingStructure.h"
 #include <string>
+#include <algorithm>
 
 buildingStructure::buildingStructure() {
-	zoneStructure = nullptr;
 	nrRows = 0;
 	nrColumns = 0;
 }
 
-buildingStructure::buildingStructure(const int** zoneStructure, const int nrRows, const int nrColumns) {
-	if (nrRows > 0 && nrColumns > 0 && zoneStructure != nullptr) {
-		this->zoneStructure = new int* [nrRows];
-		for (int j = 0; j < nrRows; ++j) {
-			this->zoneStructure[j] = new int[nrColumns];
+buildingStructure::buildingStructure(const vector<vector<int>> zoneStructure, const int nrRows, const int nrColumns) {
+	if (nrRows > 0 && nrColumns > 0 && !zoneStructure.empty() && !zoneStructure[0].empty()) {
+		this->zoneStructure.resize(nrRows);
+		for (int i = 0; i < nrRows; i++) {
+			this->zoneStructure[i].resize(nrColumns);
+			for (int j = 0; j < nrColumns; j++) {
+				this->zoneStructure[i][j] = zoneStructure[i][j];
+			}
 		}
-		this->nrRows = nrRows;
-		this->nrColumns = nrColumns;
+		this->nrRows = zoneStructure.size();
+		this->nrColumns = zoneStructure[0].size();
 	}
 	else {
-		this->zoneStructure = nullptr;
 		this->nrRows = 0;
 		this->nrColumns = 0;
 	}
 }
 
-//buildingStructure::buildingStructure(const buildingStructure& object) {
-//	if (object.nrRows > 0 && object.nrColumns > 0 && object.zoneStructure != nullptr) {
-//		zoneStructure = new int* [object.nrRows];
-//		for (int i = 0; i < object.nrRows; ++i) {
-//			zoneStructure[i] = new int[object.nrColumns];
-//		}
-//
-//		for (int i = 0; i < object.nrRows; ++i) {
-//			for (int j = 0; j < object.nrColumns; ++j) {
-//				zoneStructure[i][j] = object.zoneStructure[i][j];
-//			}
-//		}
-//		nrRows = object.nrRows;
-//		nrColumns = object.nrColumns;
-//	}
-//	else {
-//		nrRows = 0;
-//		nrColumns = 0;
-//		zoneStructure = nullptr;
-//	}
-//}
+
 
 buildingStructure::buildingStructure(const buildingStructure& object) {
-	if (object.nrRows > 0 && object.nrColumns > 0 && object.zoneStructure != nullptr) {
-		zoneStructure = new int* [object.nrRows];
-		for (int i = 0; i < object.nrRows; ++i) {
-			zoneStructure[i] = new int[object.nrColumns];
-		}
-
-		for (int i = 0; i < object.nrRows; ++i) {
-			for (int j = 0; j < object.nrColumns; ++j) {
-				zoneStructure[i][j] = object.zoneStructure[i][j];
+	if (object.nrRows > 0 && object.nrColumns > 0) {
+		this->zoneStructure.resize(object.nrRows);
+		for (int i = 0; i < object.nrRows; i++) {
+			this->zoneStructure[i].resize(object.nrColumns);
+			for (int j = 0; j < object.nrColumns; j++) {
+				this->zoneStructure[i][j] = object.zoneStructure[i][j];
 			}
 		}
-		nrRows = object.nrRows;
-		nrColumns = object.nrColumns;
+		this->nrRows = object.nrRows;
+		this->nrColumns = object.nrColumns;
 	}
 	else {
 		nrRows = 0;
 		nrColumns = 0;
-		zoneStructure = nullptr;
 	}
 }
 
 
 buildingStructure& buildingStructure::operator=(const buildingStructure& object) {
 	if (this != &object) {
-		if (object.nrColumns > 0 && object.nrRows > 0 && object.zoneStructure != nullptr) {
-			if (zoneStructure != nullptr) { //Unhandled exception thrown: read access violation.; this was nullptr
-				for (int i = 0; i < nrRows; ++i) {
-					delete[] zoneStructure[i];
-				}
-				delete[] zoneStructure;
-			}
-
-			zoneStructure = new int* [object.nrRows];
-			for (int i = 0; i < object.nrRows; ++i) {
-				zoneStructure[i] = new int[object.nrColumns];
-			}
-
-			for (int i = 0; i < object.nrRows; ++i) {
-				for (int j = 0; j < object.nrColumns; ++j) {
-					zoneStructure[i][j] = object.zoneStructure[i][j];
+		if (object.nrRows > 0 && object.nrColumns > 0) {
+			this->zoneStructure.resize(object.nrRows);
+			for (int i = 0; i < object.nrRows; i++) {
+				this->zoneStructure[i].resize(object.nrColumns);
+				for (int j = 0; j < object.nrColumns; j++) {
+					this->zoneStructure[i][j] = object.zoneStructure[i][j];
 				}
 			}
-			nrRows = object.nrRows;
-			nrColumns = object.nrColumns;
-			setEmptyZone(nrRows, nrColumns);
+			this->nrRows = object.nrRows;
+			this->nrColumns = object.nrColumns;
 		}
 		else {
-			if (zoneStructure != nullptr) {
-				for (int i = 0; i < nrRows; ++i) {
-					delete[] zoneStructure[i];
-				}
-				delete[] zoneStructure;
-			}
-			nrRows = 0;
-			nrColumns = 0;
-			zoneStructure = nullptr;
+			this->nrRows = 0;
+			this->nrColumns = 0;
 		}
 	}
 	return *this;
 }
 
 buildingStructure::~buildingStructure() {
-	if (zoneStructure != nullptr) {
-		for (int i = 0; i < nrRows; ++i) {
-			delete[] zoneStructure[i];
-		}
-		delete[] zoneStructure;
-		zoneStructure = nullptr;
-		nrRows = 0;
-		nrColumns = 0;
-	}
 	nrRows = 0;
 	nrColumns = 0;
 }
 
-int** buildingStructure::getZoneStructure() {
-	if (zoneStructure != nullptr && nrRows > 0 && nrColumns > 0) {
-		int** copy;
-		copy = new int* [nrRows];
-		for (int i = 0; i < nrRows; ++i) {
-			copy[i] = new int[nrColumns];
-		}
-
-		for (int i = 0; i < nrRows; ++i) {
-			for (int j = 0; j < nrColumns; ++j) {
-				copy[i][j] = zoneStructure[i][j];
-			}
-		}
+vector<vector<int>> buildingStructure::getZoneStructure() {
+	if (nrRows > 0 && nrColumns > 0) {
+		vector<vector<int>> copy;
+		copy = zoneStructure;
 		return copy;
 	}
 	else {
-		return 0;
+		return vector<vector<int>>();
 	}
 }
 
@@ -150,152 +92,30 @@ int buildingStructure::getNrColumns() {
 }
 
 void buildingStructure::setEmptyZone(const int nrRows, const int nrColumns) {
-	if (nrColumns > 0 && nrRows > 0) {
-		if (this->zoneStructure != nullptr) {
-			for (int i = 0; i < this->nrRows; ++i) {
-				delete[] this->zoneStructure[i];
-			}
-			delete[] this->zoneStructure;
-			this->nrRows = 0;
-			this->nrColumns = 0;
-		}
-
-		this->zoneStructure = new int* [nrRows];
-		for (int i = 0; i < nrRows; ++i) {
-			this->zoneStructure[i] = new int[nrColumns];
-		}
-
-		for (int i = 0; i < nrRows; ++i) {
-			for (int j = 0; j < nrColumns; ++j) {
-				this->zoneStructure[i][j] = 0;
-			}
-		}
+	if (nrRows > 0 && nrColumns > 0) {
 		this->nrRows = nrRows;
 		this->nrColumns = nrColumns;
+		this->zoneStructure.resize(nrRows, vector<int>(nrColumns, 0));
+		cout << endl << "Done! Zone Resized!";
 	}
 }
 
-//void buildingStructure::setEmptyZone(const int nrRows, const int nrColumns) {
-//	if (nrColumns > 0 && nrRows > 0) {
-//		// Delete the previous array, if it exists
-//		if (this->zoneStructure != nullptr) {
-//			for (int i = 0; i < this->nrRows; ++i) {
-//				delete[] this->zoneStructure[i];
-//			}
-//			delete[] this->zoneStructure;
-//		}
-//
-//		// Allocate a new array
-//		this->zoneStructure = new int* [nrRows];
-//		for (int i = 0; i < nrRows; ++i) {
-//			this->zoneStructure[i] = new int[nrColumns];
-//			// Check if memory allocation was successful
-//			if (this->zoneStructure[i] == nullptr) {
-//				// Memory allocation failed, handle error here
-//				// (e.g. throw an exception)
-//			}
-//		}
-//
-//		// Initialize the elements of the array to 0
-//		for (int i = 0; i < nrRows; ++i) {
-//			for (int j = 0; j < nrColumns; ++j) {
-//				this->zoneStructure[i][j] = 0;
-//			}
-//		}
-//
-//		// Update the class variables
-//		this->nrRows = nrRows;
-//		this->nrColumns = nrColumns;
-//
-//		// Return success
-//		cout << endl << "succes" << endl;
-//
-//	}
-//	// Return failure if nrColumns or nrRows are not positive
-//
-//}
-
-
-void buildingStructure::setZoneStructure(const int** zoneStructure, const int nrRows, const int nrColumns) {
-	if (nrColumns > 0 && nrRows > 0 && zoneStructure != nullptr) {
-		if (this->zoneStructure != nullptr) {
-			for (int i = 0; i < this->nrRows; ++i) {
-				delete[] this->zoneStructure[i];
-			}
-			delete[] this->zoneStructure;
-			this->nrRows = 0;
-			this->nrColumns = 0;
-		}
-
-		this->zoneStructure = new int* [nrRows];
-		for (int i = 0; i < nrRows; ++i) {
-			this->zoneStructure[i] = new int[nrColumns];
-		}
-
-		for (int i = 0; i < nrRows; ++i) {
-			for (int j = 0; j < nrColumns; ++j) {
-				this->zoneStructure[i][j] = zoneStructure[i][j];
-			}
-		}
+void buildingStructure::setZoneStructure(const vector<vector<int>> zoneStructure, const int nrRows, const int nrColumns) {
+	if (nrRows > 0 && nrColumns > 0 && zoneStructure.size() == nrRows && zoneStructure[0].size() == nrColumns) {
 		this->nrRows = nrRows;
 		this->nrColumns = nrColumns;
-
+		this->zoneStructure = zoneStructure;
+		cout << endl << "Done! Zone Restructured!";
 	}
 }
-//void buildingStructure::setZoneStructure(const int** zoneStructure, const int nrRows, const int nrColumns) {
-//	// Check for self-assignment
-//	if (this->zoneStructure == zoneStructure) {
-//		return;
-//	}
-//
-//	// Check that nrRows and nrColumns match the dimensions of zoneStructure
-//	bool validZoneStructure = true;
-//	if (nrColumns > 0 && nrRows > 0 && zoneStructure != nullptr) {
-//		for (int i = 0; i < nrRows; ++i) {
-//			if (zoneStructure[i] == nullptr) {
-//				validZoneStructure = false;
-//				break;
-//			}
-//		}
-//	}
-//	else {
-//		validZoneStructure = false;
-//	}
-//
-//	if (!validZoneStructure) {
-//		return;
-//	}
-//
-//	// Deallocate the old zoneStructure and allocate new memory
-//	if (this->zoneStructure != nullptr) {
-//		for (int i = 0; i < this->nrRows; ++i) {
-//			delete[] this->zoneStructure[i];
-//		}
-//		delete[] this->zoneStructure;
-//		this->nrRows = 0;
-//		this->nrColumns = 0;
-//	}
-//
-//	this->zoneStructure = new int* [nrRows];
-//	for (int i = 0; i < nrRows; ++i) {
-//		this->zoneStructure[i] = new int[nrColumns];
-//	}
-//
-//	// Copy values from zoneStructure to this->zoneStructure
-//	for (int i = 0; i < nrRows; ++i) {
-//		for (int j = 0; j < nrColumns; ++j) {
-//			this->zoneStructure[i][j] = zoneStructure[i][j];
-//		}
-//	}
-//	this->nrRows = nrRows;
-//	this->nrColumns = nrColumns;
-//}
 
 int buildingStructure::availableCapacity() {
 	return nrRows * nrColumns;
 }
 
 string buildingStructure::generateSeatID(const int zoneNumber, const int row, const int column) {
+	if (zoneNumber < 1 || row < 0 || column < 0 || row >= nrRows || column >= nrColumns)
+		return "Invalid seat coordinates";
 	string x = to_string(zoneNumber) + to_string(row) + to_string(column);
 	return x;
 }
@@ -303,8 +123,8 @@ string buildingStructure::generateSeatID(const int zoneNumber, const int row, co
 
 ostream& operator<<(ostream& out, buildingStructure obj)
 {
-	if (obj.zoneStructure != nullptr && obj.nrRows > 0 && obj.nrColumns > 0) {
-		out << endl << 0 << "   ";
+	if (obj.nrRows > 0 && obj.nrColumns > 0) {
+		out << endl << 0 << "  ";
 		for (int i = 1; i <= obj.nrColumns; ++i) {
 			out << i << " ";
 		}
@@ -312,7 +132,7 @@ ostream& operator<<(ostream& out, buildingStructure obj)
 		for (int i = 0; i < obj.nrRows; ++i) {
 			for (int j = 0; j < obj.nrColumns; ++j) {
 				if (j == 0) {
-					out << i + 1 << "   ";
+					out << i + 1 << "  ";
 				}
 				out << obj.zoneStructure[i][j] << " ";
 			}
@@ -335,7 +155,6 @@ istream& operator>>(istream& in, buildingStructure& obj)
 	cout << endl << "Columns Number: ";
 	in >> columns;
 	obj.setEmptyZone(rows, columns);
-
 
 	return in;
 }

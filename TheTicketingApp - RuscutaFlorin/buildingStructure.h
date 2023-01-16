@@ -4,6 +4,7 @@
 #define BUILDINGSTRUCTURE_H
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 class buildingStructure
@@ -11,7 +12,7 @@ class buildingStructure
 	friend class Location;
 
 private:
-	int** zoneStructure;
+	vector<vector<int>> zoneStructure;
 	int nrRows;
 	int nrColumns;
 
@@ -19,7 +20,7 @@ public:
 
 	buildingStructure();
 
-	buildingStructure(const int**, const int, const int);
+	buildingStructure(const vector<vector<int>>, const int, const int);
 
 	buildingStructure(const buildingStructure&);
 
@@ -28,7 +29,7 @@ public:
 	~buildingStructure();
 
 	/// TODO dezaloc in main
-	int** getZoneStructure();
+	vector<vector<int>> getZoneStructure();
 
 	int getNrRows();
 
@@ -36,7 +37,7 @@ public:
 
 	void setEmptyZone(const int, const int);
 
-	void setZoneStructure(const int**, const int, const int);
+	void setZoneStructure(const vector<vector<int>>, const int, const int);
 
 	int availableCapacity();
 
