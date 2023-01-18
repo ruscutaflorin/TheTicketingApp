@@ -96,7 +96,6 @@ void buildingStructure::setEmptyZone(const int nrRows, const int nrColumns) {
 		this->nrRows = nrRows;
 		this->nrColumns = nrColumns;
 		this->zoneStructure.resize(nrRows, vector<int>(nrColumns, 0));
-		cout << endl << "Done! Zone Resized!";
 	}
 }
 
@@ -105,7 +104,6 @@ void buildingStructure::setZoneStructure(const vector<vector<int>> zoneStructure
 		this->nrRows = nrRows;
 		this->nrColumns = nrColumns;
 		this->zoneStructure = zoneStructure;
-		cout << endl << "Done! Zone Restructured!";
 	}
 }
 
@@ -115,7 +113,7 @@ int buildingStructure::availableCapacity() {
 
 string buildingStructure::generateSeatID(const int zoneNumber, const int row, const int column) {
 	if (zoneNumber < 1 || row < 0 || column < 0 || row >= nrRows || column >= nrColumns)
-		return "Invalid seat coordinates";
+		return "Invalid seat coordinates\n";
 	string x = to_string(zoneNumber) + to_string(row) + to_string(column);
 	return x;
 }
@@ -123,6 +121,8 @@ string buildingStructure::generateSeatID(const int zoneNumber, const int row, co
 
 ostream& operator<<(ostream& out, buildingStructure obj)
 {
+	out << "Total available capacity is: " << obj.availableCapacity() << endl;
+
 	if (obj.nrRows > 0 && obj.nrColumns > 0) {
 		out << endl << 0 << "  ";
 		for (int i = 1; i <= obj.nrColumns; ++i) {
@@ -138,7 +138,7 @@ ostream& operator<<(ostream& out, buildingStructure obj)
 			}
 			out << endl;
 		}
-		out << "Total available capacity is: " << obj.availableCapacity();
+		out << endl;
 	}
 	else {
 		out << "There is nothing into the object!" << endl;
@@ -152,7 +152,7 @@ istream& operator>>(istream& in, buildingStructure& obj)
 	int rows, columns;
 	cout << "\nRows Number: ";
 	in >> rows;
-	cout << endl << "Columns Number: ";
+	cout << "Columns Number: ";
 	in >> columns;
 	obj.setEmptyZone(rows, columns);
 

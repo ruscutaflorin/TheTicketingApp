@@ -10,6 +10,7 @@ using namespace std;
 class buildingStructure
 {
 	friend class Location;
+	friend class Event;
 
 private:
 	vector<vector<int>> zoneStructure;

@@ -9,9 +9,16 @@
 using namespace std;
 
 long long SaleTickets::allTimeSoldTickets = 0;
+int Location::maxCapacity = 0;
 
 void RegisterEvent() {
-	Location data;
+	/*Location data;
+	cin >> data;
+	cout << data;*/
+	/*Event data;
+	cin >> data;
+	cout << data;*/
+	Tickets data;
 	cin >> data;
 	cout << data;
 }

@@ -220,7 +220,7 @@ ostream& operator<<(ostream& out, Tickets obj)
 {
 	out << obj.eventDetails;
 	if (obj.typesNumber > 0) {
-		out << endl << "There are " << obj.typesNumber << " ticket types.";
+		out << endl << "There are " << obj.typesNumber << " ticket types." << endl;
 		for (int i = 0; i < obj.typesNumber; ++i) {
 			out << obj.types[i] << " " << obj.ticketDistribution[i] << " Tickets, Price: " << obj.price[i] << endl;
 		}
@@ -232,7 +232,7 @@ istream& operator>>(istream& in, Tickets& obj)
 {
 	int typesNr;
 	in >> obj.eventDetails;
-	cout << "How many ticket types you wanna sell? " << endl;
+	cout << "How many ticket types you wanna sell? - ";
 	in >> typesNr;
 	if (typesNr > 0) {
 		obj.typesNumber = typesNr;
@@ -240,11 +240,12 @@ istream& operator>>(istream& in, Tickets& obj)
 		obj.price = new int[typesNr];
 		obj.ticketDistribution = new int[typesNr];
 		for (int i = 0; i < typesNr; ++i) {
+			in.ignore();
 			cout << endl << "Introduce the ticket name: ";
 			getline(in, obj.types[i]);
-			cout << endl << "Introduce the number of tickets: ";
+			cout << "Introduce the number of tickets: ";
 			in >> obj.ticketDistribution[i];
-			cout << endl << "Introduce the ticket price: ";
+			cout << "Introduce the ticket price: ";
 			in >> obj.price[i];
 		}
 	}

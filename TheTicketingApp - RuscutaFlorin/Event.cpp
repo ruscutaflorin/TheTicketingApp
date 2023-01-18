@@ -2,11 +2,8 @@
 #include "Helpers.h"
 #include "Location.h"
 
-//#include <string>
 
 using namespace std;
-
-// o lista de evenimente stl facuta static 
 
 Event::Event() :ageRestricted(18) {
 	date = "Undefined";
@@ -22,10 +19,11 @@ Event::Event() :ageRestricted(18) {
 };
 
 
-Event::Event(const string day, const string month, const string year, const char* eventName, const string* eventOrganizers, const  int organizersNumber, const string* eventParticipants, const  int participantsNumber, const string* eventSponsors, const  int sponsorsNumber, const long long eventSoldTickets, const int maxSpectators, const int ageRestricted, const Location locationObject)
+Event::Event(const string day, const string month, const string year, const char* eventName, const string* eventOrganizers,
+	const  int organizersNumber, const string* eventParticipants, const  int participantsNumber, const string* eventSponsors,
+	const  int sponsorsNumber, const long long eventSoldTickets, const int maxSpectators, const int ageRestricted, const Location locationObject)
 	:ageRestricted(ageRestricted)
 {
-
 	this->day = day;
 	this->month = month;
 	this->year = year;
@@ -396,35 +394,39 @@ Event Event::operator++(int i) {
 
 ostream& operator<<(ostream& out, Event obj)
 {
-	out << "The event is taking place on: " << obj.date << endl;
-	out << obj.location;
+	system("cls");
+	out << endl << "The event is taking place on: " << obj.date << endl;
+	out << obj.location << endl;
 	if (obj.eventName != nullptr) {
-		string x = obj.eventName;
-		out << endl << x;
+		out << "The event name is: " << obj.eventName << endl;
 	}
 	if (obj.eventOrganizers != nullptr && obj.organizersNumber > 0) {
-		out << endl << "The event organizers are: ";
+		out << "The event organizers are: ";
 		for (int i = 0; i < obj.organizersNumber; ++i) {
 			out << " " << obj.eventOrganizers[i] << " ";
 		}
+		out << endl;
 	}
 	if (obj.eventParticipants != nullptr && obj.participantsNumber > 0) {
-		out << endl << "The event participants are: ";
+		out << "The event participants are: ";
 		for (int i = 0; i < obj.participantsNumber; ++i) {
 			out << " " << obj.eventParticipants[i] << " ";
 		}
+		out << endl;
+
 	}
 	if (obj.eventSponsors != nullptr && obj.sponsorsNumber > 0) {
-		out << endl << "The event sponsors are: ";
+		out << "The event sponsors are: ";
 		for (int i = 0; i < obj.sponsorsNumber; ++i) {
 			out << " " << obj.eventSponsors[i] << " ";
 		}
+		out << endl;
+
 	}
 
 	if (obj.eventSoldTickets > 0) {
-		out << endl << "The event sold " << obj.eventSoldTickets << " tickets!";
+		out << "The event sold " << obj.eventSoldTickets << " tickets!" << endl;
 	}
-	out << endl;
 	out << "The event will have maximum " << obj.maxSpectators << " spectators!" << endl;
 	out << "The age restriction is: " << obj.ageRestricted << endl;
 
@@ -441,17 +443,24 @@ istream& operator>>(istream& in, Event& obj)
 	string* evPart;
 	string* evSpons;
 	int maxSpectators;
-	cout << "Enter the date of the event DD MM YYYY:" << endl;
+
+
+	cout << "Enter the date of the event DD MM YYYY: ";
 	in >> day >> year >> month;
+	cout << endl;
 	obj.setDate(day, year, month);
-	in >> object;
+	in.ignore();
+	in >> obj.location;
+
 	cout << "Enter the name of the event: ";
+	in.get();
 	getline(in, eName);
 	obj.setEventName(eName.c_str());
 	cout << endl << "How many event organizers are? - ";
 	in >> orgNr;
+	in.ignore();
 	if (orgNr > 0) {
-		cout << endl << "Name the organizers one by one: ";
+		cout << "Name the organizers one by one: ";
 		evOrg = new string[orgNr];
 		for (int i = 0; i < orgNr; ++i) {
 			getline(in, evOrg[i]);
@@ -461,31 +470,41 @@ istream& operator>>(istream& in, Event& obj)
 	}
 	cout << endl << "How many event participants are? - ";
 	in >> partNr;
+	in.ignore();
 	if (partNr > 0) {
-		cout << endl << "Name the participants one by one: ";
+		cout << "Name the participants one by one: ";
 		evPart = new string[partNr];
 		for (int i = 0; i < partNr; ++i) {
 			getline(in, evPart[i]);
 			cout << endl;
 
 		}
-		obj.setEventOrganizers(evPart, partNr);
+		obj.setEventParticipants(evPart, partNr);
 	}
 	cout << endl << "How many event sponsors are? - ";
 	in >> sponsNr;
+	in.ignore();
 	if (sponsNr > 0) {
-		cout << endl << "Name the sponsors one by one: ";
+		cout << "Name the sponsors one by one: ";
 		evSpons = new string[sponsNr];
 		for (int i = 0; i < sponsNr; ++i) {
 			getline(in, evSpons[i]);
 			cout << endl;
 		}
-		obj.setEventOrganizers(evSpons, sponsNr);
+		obj.setEventSponsors(evSpons, sponsNr);
 	}
-	cout << "Now introduce the maximum number of spectators(not greather than: " << object.getMaxCapacity() << ") - ";
+
+	cout << "Now introduce the maximum number of spectators(not greather than: " << obj.location.getMaxCapacity() << ") - ";
 	in >> maxSpectators;
-	if (maxSpectators <= object.getMaxCapacity()) {
+	if (maxSpectators <= obj.location.getMaxCapacity()) {
 		obj.maxSpectators = maxSpectators;
+		cout << "The maximum number of spectators is: " << obj.maxSpectators << "." << endl;
 	}
+	else {
+		obj.maxSpectators = obj.location.getMaxCapacity();
+		cout << endl << "Ati introdus un numar prea mare, numarul maxim de spectatori va fi: " << obj.maxSpectators << "." << endl;
+	}
+	cout << endl;
 	return in;
 }
+

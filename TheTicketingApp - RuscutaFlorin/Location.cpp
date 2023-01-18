@@ -7,7 +7,6 @@ Location::Location() :city("Unspecified") {
 	address = "Unspecified";
 	zones = nullptr;
 	nrZones = 0;
-	maxCapacity = 0;
 }
 
 Location::Location(const string city, const string address, const string* zones, const int nrZones, const vector<buildingStructure> object) {
@@ -82,8 +81,10 @@ Location& Location::operator=(const Location& object) {
 
 			nrZones = object.nrZones;
 
-			obj = vector<buildingStructure>(object.obj); // use the assignment operator of the vector to make a deep copy
-			maxCapacity = object.maxCapacity; // set maxCapacity
+			// use the assignment operator of the vector to make a deep copy
+			obj = vector<buildingStructure>(object.obj);
+
+			maxCapacity = object.maxCapacity;
 		}
 		else {
 			zones = nullptr;
@@ -162,22 +163,30 @@ void Location::setZones(const string* input, const int nr) {
 	}
 }
 
-int Location::locationCapacity(const vector<buildingStructure> object) {
-	if (!object.empty()) {
-		unsigned long long cnt = 0;
-		for (int i = 0; i < object.size(); ++i) {
-			cnt += object[i].nrColumns * object[i].nrRows;
+int Location::freeCapacity(const vector<buildingStructure> objects) {
+	if (!objects.empty()) {
+		int cnt = 0;
+		for (int i = 0; i < objects.size(); ++i) {
+			cnt += objects[i].nrColumns * objects[i].nrRows;
 		}
 		return cnt;
 	}
 	return 0;
 }
 
-int** Location::maxSeatsNextToEachotherForEachSector(const vector<buildingStructure> object) {
-
-	return nullptr;
-
+int Location::returnMaxCapacity(const vector<buildingStructure> objects) {
+	if (!objects.empty()) {
+		int answer = 0;
+		for (int i = 0; i < objects.size(); ++i) {
+			answer += objects[i].nrColumns * objects[i].nrRows;
+		}
+		return answer;
+	}
+	else {
+		return 0;
+	}
 }
+
 
 Location Location::operator--() {
 	maxCapacity--;
@@ -205,13 +214,14 @@ Location::operator string* () {
 ostream& operator<<(ostream& out, Location obj)
 {
 	if (obj.city != "") {
-		out << endl << "The location is placed in: " << obj.city;
+		out << "The location is placed in: " << obj.city << endl;
 	}
 	if (obj.address != "") {
-		out << endl << "The address is: " << obj.address << endl;
+		out << "The address is: " << obj.address << endl;
 	}
 	if (obj.zones != nullptr && obj.nrZones > 0 && !obj.obj.empty()) {
-		out << "The location has " << obj.nrZones << " sectors and its maximum capacity is: " << obj.maxCapacity << endl;;
+		int a = Location::returnMaxCapacity(obj.obj);
+		out << "The location has " << obj.nrZones << " sectors and its maximum capacity is: " << a << endl;
 		for (int i = 0; i < obj.nrZones; ++i) {
 			out << i + 1 << " - " << obj.zones[i] << endl;
 		}
@@ -228,17 +238,20 @@ istream& operator>>(istream& in, Location& obj)
 	string address;
 	int nrZones;
 	string* zones;
-	cout << "In which city is the location placed? ";
+	cout << "In which city is the location placed? - ";
 	getline(in, city);
+	cout << endl;
 	obj.setCity(city);
-	cout << endl << "Type the address here: ";
+	cout << "Type the address here: ";
 	getline(in, address);
 	obj.setAddress(address);
-	cout << endl << "How many sectors your location has? (> 0) -> ";
+	cout << endl;
+	cout << "How many sectors your location has? (> 0) -> ";
 	in >> nrZones;
+	cout << endl;
 	if (nrZones > 0) {
 		zones = new string[nrZones];
-		cout << endl << "Name your sectors: " << endl;
+		cout << "Name your sectors: " << endl;
 		getline(in, zones[0]);
 		for (int i = 0; i < nrZones; ++i) {
 			getline(in, zones[i]);
@@ -249,10 +262,9 @@ istream& operator>>(istream& in, Location& obj)
 			cout << "\nSet the dimensions of the zone " << i + 1 << "! -> ";
 			in >> x[i];
 			obj.obj.push_back(x[i]);
-			cout << endl;
 			cout << obj.obj[i];
-			cout << endl;
 		}
+		obj.maxCapacity = Location::returnMaxCapacity(obj.obj);
 	}
 
 	return in;
