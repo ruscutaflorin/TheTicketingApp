@@ -80,10 +80,7 @@ Location& Location::operator=(const Location& object) {
 			}
 
 			nrZones = object.nrZones;
-
-			// use the assignment operator of the vector to make a deep copy
 			obj = vector<buildingStructure>(object.obj);
-
 			maxCapacity = object.maxCapacity;
 		}
 		else {

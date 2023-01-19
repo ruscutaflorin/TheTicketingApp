@@ -282,8 +282,6 @@ long long Event::getSoldTickets() {
 	return eventSoldTickets;
 }
 
-
-
 void Event::setDate(const int day, const int month, const int year) {
 	Helpers helper;
 	if (helper.dateIsValid(day, month, year)) {
@@ -291,6 +289,10 @@ void Event::setDate(const int day, const int month, const int year) {
 		this->month = month;
 		this->year = year;
 		date = to_string(day) + '-' + to_string(month) + '-' + to_string(year);
+	}
+	else {
+		date = "undefined";
+		cout << "The date was not set because the input is bad! The value will be - " << date << endl;
 	}
 }
 
@@ -447,7 +449,6 @@ istream& operator>>(istream& in, Event& obj)
 
 	cout << "Enter the date of the event DD MM YYYY: ";
 	in >> day >> year >> month;
-	cout << endl;
 	obj.setDate(day, year, month);
 	in.ignore();
 	in >> obj.location;

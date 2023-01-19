@@ -1,5 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Helpers.h"
-
+#include <ctime>
 string Helpers::readString() {
 	string input;
 	getline(cin, input);
@@ -64,7 +65,10 @@ string Helpers::readStringWithOnlyLettersUntilTrue() {
 }
 
 bool Helpers::dateIsValid(int day, int month, int year) {
-	if (year < 0) {
+
+	time_t t = std::time(nullptr);
+	tm tm = *std::localtime(&t);
+	if (year < 2023 || year >(tm.tm_year + 1900)) {
 		return false;
 	}
 	if (month > 12 || month < 1) {

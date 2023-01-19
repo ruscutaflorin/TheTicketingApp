@@ -11,6 +11,8 @@ Tickets::Tickets() {
 	typesNumber = 0;
 	srand(time(0));
 	uniqueID = rand();
+
+	//pt a putea folosi uniq id imi trb un vector in care sa pun acel id unic creat la cumparare (pt a putea verifica mai tarziu validitatea)
 }
 
 Tickets::Tickets(const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject)

@@ -138,9 +138,11 @@ istream& operator>>(istream& in, SaleTickets& obj) {
 		cin >> c;
 		x += c;
 	}
-	if (h.readStringWithOnlyDigits(x) != "Only digits accepted")
+	if (h.readStringWithOnlyDigits(x) != "Only digits accepted") {
 		obj.identityDocumentNumber = x;
-	else
+	}
+	else {
 		obj.identityDocumentNumber = "Undefined";
+	}
 	return in;
 }
