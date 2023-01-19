@@ -36,7 +36,7 @@ void BuyTicket(Tickets data, SaleTickets& info) {
 					if (i == id - 1) {
 						if (info.isTicketAvailable(types[i])) {
 							info.incrementallTimeSoldTickets(1);
-							cout << "You bought 1 ticket!" << " - " << info.getAllTimeSoldTickets() << endl;
+							cout << "You bought 1 ticket!" << " - " << info.getAllTimeSoldTickets() * info.getUniqueID() * 10782 << endl;
 							distribution[i]--;
 							info.setTypesPriceAndDistribution(types, prices, distribution, data.getTypesNumber());
 						}
