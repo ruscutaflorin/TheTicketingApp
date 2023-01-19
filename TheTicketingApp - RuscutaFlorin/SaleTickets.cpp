@@ -1,5 +1,7 @@
 #include <iostream>
+#include <string>
 #include "SaleTickets.h"
+#include "Helpers.h"
 using namespace std;
 
 SaleTickets::SaleTickets() {
@@ -18,9 +20,28 @@ SaleTickets::SaleTickets(const string clientName, const string identityDocumentN
 	allTimeSoldTickets += purchasedTickets;
 }
 
+SaleTickets::~SaleTickets() {
+	if (types != nullptr)
+		delete[] types, types = nullptr;
+	if (price != nullptr)
+		delete[] price, price = nullptr;
+}
+
+unsigned int SaleTickets::getClientAge() {
+	return clientAge;
+}
+
+string SaleTickets::getClientName() {
+	return clientName;
+}
+
+string SaleTickets::getID() {
+	return identityDocumentNumber;
+}
+
 long long SaleTickets::averageTicketSales(const SaleTickets* tickets, const unsigned int nrObjects) {
 	if (tickets != nullptr && nrObjects > 0) {
-		int answer = 0;
+		long long answer = 0;
 		for (int i = 0; i < nrObjects; ++i) {
 			answer += tickets[i].purchasedTickets;
 		}
@@ -36,64 +57,10 @@ long long SaleTickets::getAllTimeSoldTickets() {
 }
 
 void SaleTickets::incrementallTimeSoldTickets(const int nr) {
-	SaleTickets::allTimeSoldTickets = allTimeSoldTickets + nr;
+	allTimeSoldTickets = allTimeSoldTickets + nr;
 }
 
-
-ostream& operator<<(ostream& out, SaleTickets obj)
-{
-	out << "Client Name is: " << obj.clientName;
-	out << endl << "Client Age is: " << obj.clientAge;
-	out << endl << "CNP: " << obj.identityDocumentNumber;
-	out << endl << "The client purchased " << obj.purchasedTickets << " number of tickets!";
-	out << endl;
-	return out;
-}
-
-/*
-#include <iostream>
-#include "SaleTickets.h"
-using namespace std;
-
-SaleTickets::SaleTickets() {
-	clientAge = 0;
-	identityDocumentNumber = "Undefined";
-	clientName = "Undefined";
-	purchasedTickets = 0;
-}
-
-SaleTickets::SaleTickets(const string clientName, const string identityDocumentNumber, const unsigned int clientAge, const unsigned int purchasedTickets, const unsigned int typesNumber, const string* types, const int* ticketDistribution, const int* price, Event eventObject) : Tickets(typesNumber, types, ticketDistribution, price, eventObject) {
-	this->clientName = clientName;
-	this->identityDocumentNumber = identityDocumentNumber;
-	this->clientAge = clientAge;
-	this->purchasedTickets = purchasedTickets;
-
-	allTimeSoldTickets += purchasedTickets;
-}
-
-long long SaleTickets::averageTicketSales(const SaleTickets* tickets, const unsigned int nrObjects) {
-	if (tickets != nullptr && nrObjects > 0) {
-		int answer = 0;
-		for (int i = 0; i < nrObjects; ++i) {
-			answer += tickets[i].purchasedTickets;
-		}
-		return answer / nrObjects;
-	}
-	else {
-		return 0;
-	}
-}
-
-long long SaleTickets::getAllTimeSoldTickets() {
-	return allTimeSoldTickets;
-}
-
-void SaleTickets::incrementallTimeSoldTickets(const int nr) {
-	SaleTickets::allTimeSoldTickets = allTimeSoldTickets + nr;
-}
-
-int SaleTickets::getTotalCost() {
-	// Calculate the total cost of the tickets purchased
+int SaleTickets::getTotalCost(const string ticketType, const int purchasedTickets) {
 	int totalCost = 0;
 	for (int i = 0; i < typesNumber; i++) {
 		if (types[i] == ticketType) {
@@ -104,8 +71,7 @@ int SaleTickets::getTotalCost() {
 	return totalCost;
 }
 
-bool SaleTickets::isTicketAvailable(const string& ticketType) {
-	// Check if the requested ticket type is still available
+bool SaleTickets::isTicketAvailable(const string ticketType) {
 	for (int i = 0; i < typesNumber; i++) {
 		if (types[i] == ticketType && ticketDistribution[i] > 0) {
 			return true;
@@ -114,8 +80,7 @@ bool SaleTickets::isTicketAvailable(const string& ticketType) {
 	return false;
 }
 
-void SaleTickets::updateTicketDistribution(const string& ticketType, const int nr) {
-	// Update the ticket distribution for the requested ticket type
+void SaleTickets::decreaseTicketDistribution(const string ticketType, const int nr) {
 	for (int i = 0; i < typesNumber; i++) {
 		if (types[i] == ticketType) {
 			ticketDistribution[i] -= nr;
@@ -124,40 +89,31 @@ void SaleTickets::updateTicketDistribution(const string& ticketType, const int n
 	}
 }
 
-void SaleTickets::displayTicketInformation() {
-	// Display the ticket information (e.g., event name, ticket type, price)
-	cout << "Event: " << eventObject.getEventName() << endl;
-	cout << "Ticket type: " << ticketType << endl;
+void SaleTickets::increaseTicketDistribution(const string ticketType, const int nr) {
 	for (int i = 0; i < typesNumber; i++) {
 		if (types[i] == ticketType) {
-			cout << "Price: " << price[i] << " RON" << endl;
+			ticketDistribution[i] += nr;
 			break;
 		}
 	}
 }
 
-bool SaleTickets::hasPurchasedTickets(const string& identityDocumentNumber) {
-	// Check if the customer has already purchased tickets by comparing the identity document number
-	return this->identityDocumentNumber == identityDocumentNumber;
+void SaleTickets::displayTicketInformation(const string ticketType) {
+	cout << "Event: " << eventDetails << endl;
+	cout << "Ticket type: " << ticketType << endl;
+	for (int i = 0; i < typesNumber; i++) {
+		if (types[i] == ticketType) {
+			cout << "Price: " << price[i] << " RON, Available: " << ticketDistribution[i] << endl;
+			break;
+		}
+	}
 }
 
-void SaleTickets::displaySummary() {
-	// Display a summary of the ticket sales (e.g., total number of tickets sold, total revenue)
-	cout << "Total number of tickets sold: " << purchasedTickets << endl;
-	cout << "Total revenue: " << getTotalCost() << " RON" << endl;
-}
 
-bool SaleTickets::isEligibleForDiscount(const string& discountType) {
-	// Check if the customer is eligible for a discount (e.g., based on age or membership status)
-	if (discountType == "age") {
-		return clientAge < 18 || clientAge > 65;
-	}
-	else if (discountType == "membership") {
-		return clientName[0] == 'A'; // assuming that customers with names starting with 'A' are eligible for a discount
-	}
-	else {
-		return false;
-	}
+bool SaleTickets::isEligibleForBuying() {
+	if (clientAge >= 18)
+		return 1;
+	return 0;
 }
 
 ostream& operator<<(ostream& out, SaleTickets obj)
@@ -169,4 +125,22 @@ ostream& operator<<(ostream& out, SaleTickets obj)
 	out << endl;
 	return out;
 }
-*/
+
+istream& operator>>(istream& in, SaleTickets& obj) {
+	Helpers h;
+	cout << "Type your age: ";
+	in >> obj.clientAge;
+	cout << "Type your ID: ";
+	in.ignore();
+	char c;
+	string x = "";
+	for (int i = 0; i < 13; ++i) {
+		cin >> c;
+		x += c;
+	}
+	if (h.readStringWithOnlyDigits(x) != "Only digits accepted")
+		obj.identityDocumentNumber = x;
+	else
+		obj.identityDocumentNumber = "Undefined";
+	return in;
+}

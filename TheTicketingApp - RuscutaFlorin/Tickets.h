@@ -8,7 +8,7 @@
 #include "Event.h" 
 class Tickets
 {
-private:
+protected:
 	Event eventDetails;
 	string* types;
 	int* price;

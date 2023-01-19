@@ -42,12 +42,14 @@ Tickets::Tickets(const Tickets& object) {
 		}
 		typesNumber = object.typesNumber;
 		eventDetails = object.eventDetails;
+		uniqueID = 0;
 	}
 	else {
 		types = nullptr;
 		price = nullptr;
 		ticketDistribution = nullptr;
 		typesNumber = 0;
+		uniqueID = 0;
 	}
 }
 
@@ -149,20 +151,17 @@ void Tickets::setTypesPriceAndDistribution(const string* types, const int* price
 	if (types != nullptr && price != nullptr && ticketDistribution != nullptr && nr > 0) {
 		if (this->types != nullptr) {
 			delete[] this->types;
-			this->typesNumber = 0;
 		}
 		if (this->price != nullptr) {
 			delete[] this->price;
-			this->typesNumber = 0;
 		}
 		if (this->ticketDistribution != nullptr) {
 			delete[] this->ticketDistribution;
-			this->typesNumber = 0;
 		}
-		this->types = new string[typesNumber];
-		this->price = new int[typesNumber];
-		this->ticketDistribution = new int[typesNumber];
-		for (int i = 0; i < typesNumber; ++i) {
+		this->types = new string[nr];
+		this->price = new int[nr];
+		this->ticketDistribution = new int[nr];
+		for (int i = 0; i < nr; ++i) {
 			this->types[i] = types[i];
 			this->price[i] = price[i];
 			this->ticketDistribution[i] = ticketDistribution[i];

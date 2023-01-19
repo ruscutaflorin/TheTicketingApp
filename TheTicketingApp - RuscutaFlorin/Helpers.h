@@ -15,7 +15,13 @@ public:
 
 	string readString();
 
+	string readString(string);
+
 	string readStringWithOnlyLetters();
+
+	string readStringWithOnlyDigits();
+
+	string readStringWithOnlyDigits(string);
 
 	string readStringWithOnlyLettersUntilTrue();
 

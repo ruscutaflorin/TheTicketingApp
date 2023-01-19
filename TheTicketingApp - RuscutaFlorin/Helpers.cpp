@@ -6,6 +6,11 @@ string Helpers::readString() {
 	return input;
 }
 
+string Helpers::readString(string input) {
+	getline(cin, input);
+	return input;
+}
+
 string Helpers::readStringWithOnlyLetters() {
 	char c;
 	string input;
@@ -18,6 +23,30 @@ string Helpers::readStringWithOnlyLetters() {
 			return "Only letters accepted";
 	}
 
+	return input;
+}
+
+string Helpers::readStringWithOnlyDigits() {
+	char c;
+	string input;
+
+	input = readString();
+
+	for (int i = 0; i < input.length(); ++i) {
+		c = input.at(i);
+		if (!isdigit(c))
+			return "Only digits accepted";
+	}
+
+	return input;
+}
+string Helpers::readStringWithOnlyDigits(string input) {
+	char c;
+	for (int i = 0; i < input.length(); ++i) {
+		c = input.at(i);
+		if (!isdigit(c))
+			return "Only digits accepted";
+	}
 	return input;
 }
 
